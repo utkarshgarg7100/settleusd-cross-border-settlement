@@ -5,6 +5,8 @@ Measured settlement: **4.3s** end to end, ~$0.12 gas, against 2&ndash;5 business
 
 Testnet payment stablecoin backing a B2B cross-border settlement demo. **Portfolio artifact — not production.** No real reserves back this token.
 
+📖 **[EXPLAINER.md](EXPLAINER.md) — the whole project explained from zero.** What a stablecoin is, what every file does, why each decision was made, and what's real versus simulated. Written to be readable with no blockchain background.
+
 `contracts/SettleUSD.sol` — ERC20, 6 decimals (mirrors USDC), `ISSUER_ROLE` for mint/burn/pause, plus a display-only `reserveRatioBps` the dashboard reads. Events: `Minted`, `Burned`, `ReserveRatioUpdated`.
 
 ## Test
