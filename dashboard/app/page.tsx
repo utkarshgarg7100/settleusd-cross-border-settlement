@@ -37,6 +37,7 @@ export default function Home() {
   const [receipt, setReceipt] = useState<Receipt | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [redeeming, setRedeeming] = useState(false);
+  const [resetting, setResetting] = useState(false);
 
   const loadState = () => fetch("/api/state").then((r) => r.json()).then(setState).catch(() => {});
   useEffect(() => {
@@ -81,6 +82,20 @@ export default function Home() {
       setError((e as Error).message);
     } finally {
       setRedeeming(false);
+    }
+  }
+
+  async function resetDemo() {
+    setResetting(true); setError(null);
+    try {
+      const res = await fetch("/api/mint", { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Top-up failed");
+      loadState();
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setResetting(false);
     }
   }
 
@@ -184,6 +199,13 @@ export default function Home() {
                       The exporter hands SUSD back; the issuer burns it and a licensed partner wires INR.
                       Watch total supply fall.
                     </p>
+                    <button
+                      onClick={resetDemo}
+                      disabled={resetting}
+                      className="mt-2 w-full rounded-lg px-3 py-1.5 text-[11px] font-medium text-slate-500 transition hover:text-slate-300 disabled:text-slate-700"
+                    >
+                      {resetting ? "Minting…" : "↺ Reset demo — mint payer back to 1,000,000 SUSD"}
+                    </button>
                   </div>
                 </div>
               ) : (
